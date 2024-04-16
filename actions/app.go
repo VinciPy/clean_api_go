@@ -2,10 +2,8 @@ package actions
 
 import (
 	"clean_api_go/locales"
-	"clean_api_go/models"
 
 	"github.com/gobuffalo/buffalo"
-	"github.com/gobuffalo/buffalo-pop/v3/pop/popmw"
 	"github.com/gobuffalo/envy"
 	contenttype "github.com/gobuffalo/mw-contenttype"
 	forcessl "github.com/gobuffalo/mw-forcessl"
@@ -48,23 +46,12 @@ func App() *buffalo.App {
 			},
 			SessionName: "_clean_api_go_session",
 		})
-
-		// Automatically redirect to SSL
 		app.Use(forceSSL())
-
-		// Log request parameters (filters apply).
 		app.Use(paramlogger.ParameterLogger)
-
-		// Set the request content type to JSON
 		app.Use(contenttype.Set("application/json"))
-
-		// Wraps each request in a transaction.
-		//   c.Value("tx").(*pop.Connection)
-		// Remove to disable this.
-		app.Use(popmw.Transaction(models.DB))
+		// app.Use(popmw.Transaction(models.DB))
 		app.GET("/", HomeHandler)
 	}
-
 	return app
 }
 
